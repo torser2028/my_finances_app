@@ -7,6 +7,7 @@ import filterFactory, {
 } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 
+import FloatActionButton from "./FloatActionButton";
 import BarChart from "../../assets/basic-bar-graph.png";
 
 export default () => {
@@ -112,6 +113,7 @@ export default () => {
           defaultSorted={defaultSorted}
         />
       </div>
+      <FloatActionButton />
     </div>
   );
 };
