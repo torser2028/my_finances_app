@@ -10,7 +10,7 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import FloatActionButton from "./FloatActionButton";
 import BarChart from "../../assets/basic-bar-graph.png";
 
-export default () => {
+const Dashboard = () => {
   const categoryOptions = {
     0: "Food",
     1: "Home",
@@ -32,6 +32,7 @@ export default () => {
 
   const products = [
     {
+      id: 1,
       name: "Product 1",
       date: "2022/09/25",
       value: "3500",
@@ -39,18 +40,20 @@ export default () => {
       source: 0,
     },
     {
+      id: 2,
       name: "Product 2",
       date: "2022/09/23",
       value: "3500",
       category: 1,
-      source: 0,
+      source: 1,
     },
     {
+      id: 3,
       name: "Product 3",
       date: "2022/09/15",
       value: "3500",
       category: 2,
-      source: 0,
+      source: 2,
     },
   ];
   const columns = [
@@ -117,3 +120,5 @@ export default () => {
     </div>
   );
 };
+
+export default Dashboard;
