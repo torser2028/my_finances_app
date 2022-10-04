@@ -4,7 +4,7 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import { useGetCategoriesQuery } from "../../redux/api/categories";
 
 const Categories = () => {
-  const { data: categories, error, isLoading } = useGetCategoriesQuery();
+  const { data, error, isLoading } = useGetCategoriesQuery();
 
   const defaultSorted = [
     {
@@ -14,10 +14,6 @@ const Categories = () => {
   ];
 
   const columns = [
-    {
-      dataField: "id",
-      text: "ID",
-    },
     {
       dataField: "name",
       text: "Name",
@@ -30,7 +26,7 @@ const Categories = () => {
       <h2>Categories</h2>
       <BootstrapTable
         keyField="id"
-        data={categories}
+        data={data}
         columns={columns}
         defaultSorted={defaultSorted}
       />
