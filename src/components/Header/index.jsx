@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <Navbar bg="light" expand={false} className="mb-3">
       <Container fluid>
-        <Navbar.Brand href="#">Mis Finanzas</Navbar.Brand>
+        <Navbar.Brand href="/">Mis Finanzas</Navbar.Brand>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand`} />
         <Navbar.Offcanvas
           id={`offcanvasNavbar-expand`}
@@ -21,7 +21,7 @@ const Header = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Nav.Link href="#">Categories</Nav.Link>
+              <Nav.Link href="/categories">Categories</Nav.Link>
               <Nav.Link href="#">Sources</Nav.Link>
               <Nav.Link href="#">Sign Out</Nav.Link>
             </Nav>
