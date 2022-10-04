@@ -1,11 +1,12 @@
 import React from "react";
+import Header from "./components/Header";
 import "./App.css";
 import RoutesComponent from "./routes";
 
 function App() {
   return (
     <div className="App">
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <Header />
       <RoutesComponent />
     </div>
   );
