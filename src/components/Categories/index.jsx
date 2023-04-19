@@ -5,7 +5,6 @@ import { useGetCategoriesQuery } from "../../redux/api/categories";
 
 const Categories = () => {
   const { data, error, isLoading } = useGetCategoriesQuery();
-
   const defaultSorted = [
     {
       dataField: "name",
@@ -22,15 +21,23 @@ const Categories = () => {
   ];
 
   return (
-    <>
-      <h2>Categories</h2>
-      <BootstrapTable
-        keyField="id"
-        data={data}
-        columns={columns}
-        defaultSorted={defaultSorted}
-      />
-    </>
+    <div className="App">
+      {error ? (
+        <>Oh no, there was an error</>
+      ) : isLoading ? (
+        <>Loading...</>
+      ) : data ? (
+        <>
+          <h2>Categories</h2>
+          <BootstrapTable
+            keyField="id"
+            data={data}
+            columns={columns}
+            defaultSorted={defaultSorted}
+          />
+        </>
+      ) : null}
+    </div>
   );
 };
 
