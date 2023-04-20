@@ -22,7 +22,7 @@ const Header = () => {
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
               <Nav.Link href="/categories">Categories</Nav.Link>
-              <Nav.Link href="#">Sources</Nav.Link>
+              <Nav.Link href="/sources">Sources</Nav.Link>
               <Nav.Link href="#">Sign Out</Nav.Link>
             </Nav>
           </Offcanvas.Body>
