@@ -9,8 +9,13 @@
     "@testing-library/user-event": "^14.1.1",
     "autoprefixer": "^10.4.11",
     "bootstrap": "^5.2.2",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
     "node-sass": "^7.0.3",
     "postcss": "^8.4.16",
+    "prettier": "^2.8.8",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-bootstrap-table-next": "^4.0.3",
@@ -31,8 +36,17 @@
   "eslintConfig": {
     "extends": [
       "react-app",
+      "plugin:prettier/recommended",
       "react-app/jest"
-    ]
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": ["error", {
+        "endOfLine": "auto"
+      }]
+    }
   },
   "browserslist": {
     "production": [
@@ -45,5 +59,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }

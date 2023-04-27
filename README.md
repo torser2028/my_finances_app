@@ -50,3 +50,26 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ```shell
 nvm use 18.7.0
 ```
+
+## Formatting
+
+We are using prettier to check the formatting of the code.
+You can check the formatting of the code by running the following command for a specific file.
+
+```shell
+npx prettier --check "<path/to/your/file>"
+```
+
+Or for the entire project
+
+```shell
+npx prettier --check .
+```
+
+And also we are using husky to check the formatting before commiting the code using lint-staged.
+If there are any formatting errors, the commit will fail showing the errors.
+You can fix the errors by running the following command.
+
+```shell
+npx prettier --write "<path/to/your/file>"
+```
