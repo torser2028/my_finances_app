@@ -51,7 +51,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 nvm use 18.7.0
 ```
 
-## Formatting
+## Formatting and linting
 
 We are using prettier to check the formatting of the code.
 You can check the formatting of the code by running the following command for a specific file.
@@ -72,4 +72,21 @@ You can fix the errors by running the following command.
 
 ```shell
 npx prettier --write "<path/to/your/file>"
+```
+
+## Testing
+
+We are using Jest and React Testing Library for testing.
+You can run the tests by running the following command.
+
+```shell
+yarn test
+```
+
+```shell
+yarn run test:watch
+```
+
+```shell
+yarn run test:coverage
 ```
