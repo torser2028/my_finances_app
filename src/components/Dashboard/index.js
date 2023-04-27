@@ -1,103 +1,103 @@
-import BootstrapTable from "react-bootstrap-table-next";
+import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
   dateFilter,
   numberFilter,
   selectFilter,
   textFilter,
-} from "react-bootstrap-table2-filter";
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+} from 'react-bootstrap-table2-filter';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
-import FloatActionButton from "./FloatActionButton";
-import BarChart from "../../assets/basic-bar-graph.png";
+import FloatActionButton from './FloatActionButton';
+import BarChart from '../../assets/basic-bar-graph.png';
 
 const Dashboard = () => {
   const categoryOptions = {
-    0: "Food",
-    1: "Home",
-    2: "Car",
+    0: 'Food',
+    1: 'Home',
+    2: 'Car',
   };
 
   const sourceOptions = {
-    0: "Savings Bank 1",
-    1: "Credit Card",
-    2: "Savings Bank 2",
+    0: 'Savings Bank 1',
+    1: 'Credit Card',
+    2: 'Savings Bank 2',
   };
 
   const defaultSorted = [
     {
-      dataField: "date",
-      order: "asc",
+      dataField: 'date',
+      order: 'asc',
     },
   ];
 
   const products = [
     {
       id: 1,
-      name: "Product 1",
-      date: "2022/09/25",
-      value: "3500",
+      name: 'Product 1',
+      date: '2022/09/25',
+      value: '3500',
       category: 0,
       source: 0,
     },
     {
       id: 2,
-      name: "Product 2",
-      date: "2022/09/23",
-      value: "3500",
+      name: 'Product 2',
+      date: '2022/09/23',
+      value: '3500',
       category: 1,
       source: 1,
     },
     {
       id: 3,
-      name: "Product 3",
-      date: "2022/09/15",
-      value: "3500",
+      name: 'Product 3',
+      date: '2022/09/15',
+      value: '3500',
       category: 2,
       source: 2,
     },
   ];
   const columns = [
     {
-      dataField: "name",
-      text: "Name",
+      dataField: 'name',
+      text: 'Name',
       sort: true,
       filter: textFilter(),
-      footer: "",
+      footer: '',
     },
     {
-      dataField: "date",
-      text: "Date",
+      dataField: 'date',
+      text: 'Date',
       sort: true,
       filter: dateFilter(),
-      footer: "",
+      footer: '',
     },
     {
-      dataField: "value",
-      text: "Value",
+      dataField: 'value',
+      text: 'Value',
       sort: true,
       filter: numberFilter(),
       footer: (columnData) =>
         columnData.reduce((acc, item) => parseInt(acc) + parseInt(item), 0),
     },
     {
-      dataField: "category",
-      text: "Category",
+      dataField: 'category',
+      text: 'Category',
       sort: true,
       formatter: (cell) => categoryOptions[cell],
       filter: selectFilter({
         options: categoryOptions,
       }),
-      footer: "",
+      footer: '',
     },
     {
-      dataField: "source",
-      text: "source",
+      dataField: 'source',
+      text: 'source',
       sort: true,
       formatter: (cell) => sourceOptions[cell],
       filter: selectFilter({
         options: sourceOptions,
       }),
-      footer: "",
+      footer: '',
     },
   ];
 

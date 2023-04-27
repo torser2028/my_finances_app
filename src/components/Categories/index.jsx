@@ -1,21 +1,21 @@
-import BootstrapTable from "react-bootstrap-table-next";
-import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import BootstrapTable from 'react-bootstrap-table-next';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
-import { useGetCategoriesQuery } from "../../redux/api/categories";
+import { useGetCategoriesQuery } from '../../redux/api/categories';
 
 const Categories = () => {
   const { data, error, isLoading } = useGetCategoriesQuery();
   const defaultSorted = [
     {
-      dataField: "name",
-      order: "asc",
+      dataField: 'name',
+      order: 'asc',
     },
   ];
 
   const columns = [
     {
-      dataField: "name",
-      text: "Name",
+      dataField: 'name',
+      text: 'Name',
       sort: true,
     },
   ];

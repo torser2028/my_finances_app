@@ -1,7 +1,7 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { setupListeners } from "@reduxjs/toolkit/query";
-import { categoriesApi } from "../redux/api/categories";
-import { sourcesApi } from "../redux/api/sources";
+import { configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query';
+import { categoriesApi } from '../redux/api/categories';
+import { sourcesApi } from '../redux/api/sources';
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +11,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       categoriesApi.middleware,
-      sourcesApi.middleware
+      sourcesApi.middleware,
     ),
 });
 
