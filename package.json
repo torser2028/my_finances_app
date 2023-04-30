@@ -37,38 +37,15 @@
     "test:coverage": "jest --coverage"
   },
   "eslintConfig": {
-    "env": {
-      "browser": true,
-      "es2021": true,
-      "jest/globals": true
-    },
     "extends": [
-      "plugin:react/recommended",
-      "plugin:jest/recommended",
-      "airbnb",
+      "react-app",
+      "plugin:prettier/recommended",
+      "react-app/jest"
+    ],
+    "plugins": [
       "prettier"
     ],
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "plugins": [
-      "react",
-      "jest"
-    ],
     "rules": {
-      "no-underscore-dangle": 0,
-      "import/extensions": [
-        "error",
-        "ignorePackages",
-        {
-          "js": "always",
-          "jsx": "always"
-        }
-      ],
       "prettier/prettier": [
         "error",
         {
@@ -91,14 +68,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn test && lint-staged"
+      "pre-commit": "lint-staged"
     }
-  },
-  "devDependencies": {
-    "babel-jest": "^29.5.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-jest": "^27.2.1",
-    "eslint-plugin-react": "^7.32.2",
-    "jest-environment-jsdom": "^29.5.0"
   }
 }
