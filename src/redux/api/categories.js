@@ -1,12 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import fetch from 'isomorphic-fetch';
 
 export const categoriesApi = createApi({
   reducerPath: 'categoriesApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3001/api/v1',
-    fetchFn: fetch,
-  }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001/api/v1' }),
   endpoints: (builder) => ({
     getCategories: builder.query({
       query: () => ({
