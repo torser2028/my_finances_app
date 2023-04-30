@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "autoprefixer": "^10.4.11",
@@ -11,7 +12,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
-    "isomorphic-fetch": "^3.0.0",
+    "jest": "^29.5.0",
     "lint-staged": "^13.2.2",
     "node-sass": "^7.0.3",
     "postcss": "^8.4.16",
@@ -30,7 +31,51 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2021": true,
+      "jest/globals": true
+    },
+    "extends": [
+      "plugin:react/recommended",
+      "plugin:jest/recommended",
+      "airbnb",
+      "prettier"
+    ],
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "plugins": [
+      "react",
+      "jest"
+    ],
+    "rules": {
+      "no-underscore-dangle": 0,
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "js": "always",
+          "jsx": "always"
+        }
+      ],
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ]
+    }
   },
   "browserslist": {
     "production": [
@@ -50,7 +95,10 @@
     }
   },
   "devDependencies": {
+    "babel-jest": "^29.5.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-react": "^7.32.2"
+    "eslint-plugin-jest": "^27.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "jest-environment-jsdom": "^29.5.0"
   }
 }
