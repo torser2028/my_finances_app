@@ -1,7 +1,13 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-const CreateTransactionModal = ({ status, handleCloseTransactionsModal }) => {
+import TransactionsForm from './TransactionsForm';
+
+const CreateTransactionModal = ({
+  status,
+  handleCloseTransactionsModal,
+  type,
+}) => {
   return (
     <div
       className="modal show"
@@ -11,7 +17,9 @@ const CreateTransactionModal = ({ status, handleCloseTransactionsModal }) => {
         <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Body>
+          <TransactionsForm type={type} />
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseTransactionsModal}>
             Close

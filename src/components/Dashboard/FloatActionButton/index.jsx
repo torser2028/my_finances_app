@@ -11,7 +11,11 @@ import './styles.scss';
 const FloatActionButton = () => {
   const [open, setOpen] = useState(false);
   const [showTransactionsModal, setShowTransactionsModal] = useState(false);
-  const handleShowTransactionsModal = () => setShowTransactionsModal(true);
+  const [transactionsType, setTransactionsType] = useState('');
+  const handleShowTransactionsModal = (type) => {
+    setShowTransactionsModal(true);
+    setTransactionsType(type);
+  };
   const handleCloseTransactionsModal = () => setShowTransactionsModal(false);
 
   const actions = [
@@ -31,13 +35,13 @@ const FloatActionButton = () => {
       label: 'New Income',
       icon: <FaMoneyBillAlt />,
       color: '#276221',
-      onClick: handleShowTransactionsModal,
+      onClick: () => handleShowTransactionsModal('income'),
     },
     {
       label: 'New Expense',
       icon: <FaMoneyBillAlt />,
       color: '#ff0000',
-      onClick: handleShowTransactionsModal,
+      onClick: () => handleShowTransactionsModal('expense'),
     },
   ];
 
@@ -62,6 +66,7 @@ const FloatActionButton = () => {
       <CreateTransactionModal
         status={showTransactionsModal}
         handleCloseTransactionsModal={handleCloseTransactionsModal}
+        type={transactionsType}
       />
     </>
   );
