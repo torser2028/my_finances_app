@@ -18,6 +18,11 @@ const Categories = () => {
       text: 'Name',
       sort: true,
     },
+    {
+      dataField: 'is_user_category',
+      text: 'User Category',
+      sort: true,
+    },
   ];
 
   return (
@@ -31,7 +36,7 @@ const Categories = () => {
           <h2>Categories</h2>
           <BootstrapTable
             keyField="id"
-            data={data}
+            data={data.categories}
             columns={columns}
             defaultSorted={defaultSorted}
           />

@@ -33,8 +33,8 @@ const Dashboard = () => {
 
   const categories = useMemo(() => {
     let categories = {};
-    if (categoriesData) {
-      categoriesData.forEach((category) => {
+    if (categoriesData && isSuccess) {
+      categoriesData.categories.forEach((category) => {
         categories[category.id] = category.name;
       });
     }
