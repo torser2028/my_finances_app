@@ -35,7 +35,7 @@ const Dashboard = () => {
     let categories = {};
     if (categoriesData && isSuccess) {
       categoriesData.categories.forEach((category) => {
-        categories[category.id] = category.name;
+        categories[category.name] = category.name;
       });
     }
     return categories;
@@ -52,8 +52,8 @@ const Dashboard = () => {
   const sources = useMemo(() => {
     let sources = {};
     if (sourcesData) {
-      sourcesData.forEach((category) => {
-        sources[category.id] = category.name;
+      sourcesData.forEach((source) => {
+        sources[source.name] = source.name;
       });
     }
     return sources;
@@ -65,6 +65,32 @@ const Dashboard = () => {
     sourcesError,
   ]);
 
+  const priceFormatter = (cell, row) => {
+    const formattedValue = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(cell);
+
+    if (row.transaction_type === 'income') {
+      return (
+        <span>
+          <strong style={{ color: '#276221' }}>{formattedValue}</strong>
+        </span>
+      );
+    } else {
+      return (
+        <span>
+          <strong style={{ color: '#ff0000' }}>{formattedValue}</strong>
+        </span>
+      );
+    }
+  };
+
+  const dateFormatter = (cell, row) => {
+    const formattedDate = new Date(cell).toLocaleDateString('en-US');
+    return <span>{formattedDate}</span>;
+  };
+
   const defaultSorted = [
     {
       dataField: 'date',
@@ -72,7 +98,6 @@ const Dashboard = () => {
     },
   ];
 
-  // TODO: The drop down filters are not getting the that on load
   const columns = [
     {
       dataField: 'name',
@@ -81,10 +106,12 @@ const Dashboard = () => {
       filter: textFilter(),
       footer: '',
     },
+    { dataField: 'transaction_type', text: 'Type', sort: true, footer: '' },
     {
       dataField: 'date',
       text: 'Date',
       sort: true,
+      formatter: dateFormatter,
       filter: dateFilter(),
       footer: '',
     },
@@ -93,27 +120,27 @@ const Dashboard = () => {
       text: 'Value',
       sort: true,
       filter: numberFilter(),
+      formatter: priceFormatter,
       footer: (columnData) =>
-        columnData.reduce((acc, item) => parseInt(acc) + parseInt(item), 0),
+        `$${columnData.reduce(
+          (acc, item) => parseInt(acc) + parseInt(item),
+          0,
+        )}`,
     },
     {
       dataField: 'category',
       text: 'Category',
       sort: true,
-      formatter: (cell) => categories[cell],
       filter: selectFilter({
-        options: categories || {},
+        options: categories,
       }),
       footer: '',
     },
     {
       dataField: 'source',
-      text: 'source',
+      text: 'Source',
       sort: true,
-      formatter: (cell) => sources[cell],
-      filter: selectFilter({
-        options: sources || {},
-      }),
+      filter: selectFilter({ options: sources }),
       footer: '',
     },
   ];
@@ -130,7 +157,7 @@ const Dashboard = () => {
             {/* <img src={BarChart} alt="Bar Chart Placeholder Image" /> */}
           </div>
           <div>
-            <h2>Movements</h2>
+            <h2>Transactions</h2>
             <BootstrapTable
               keyField="id"
               data={transactionsData}
