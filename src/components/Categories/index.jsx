@@ -1,7 +1,7 @@
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
-import { useGetCategoriesQuery } from '../../redux/api/categories';
+import { useGetCategoriesQuery } from '../../redux/api/categoriesApi';
 
 const Categories = () => {
   const { data, error, isLoading } = useGetCategoriesQuery();

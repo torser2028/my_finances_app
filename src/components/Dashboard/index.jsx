@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
   dateFilter,
@@ -21,36 +21,49 @@ const Dashboard = () => {
     error: transactionsError,
     isLoading: transactionsLoading,
   } = useGetTransactionsQuery();
+
   const {
-    data: categoriesData,
-    error: categoriesError,
-    isLoading: categoriesLoading,
+    data: categoriesData = [],
+    isLoading,
+    isFetching,
+    isSuccess,
+    isError,
+    error,
   } = useGetCategoriesQuery();
-  const {
-    data: sourcesData,
-    error: sourcesError,
-    isLoading: sourcesLoading,
-  } = useGetSourcesQuery();
 
-  const [categoryOptions, setCategoryOptions] = useState({});
-  const [sourceOptions, setSourceOptions] = useState({});
-
-  useEffect(() => {
+  const categories = useMemo(() => {
+    let categories = {};
     if (categoriesData) {
-      let categories = {};
       categoriesData.forEach((category) => {
         categories[category.id] = category.name;
       });
-      setCategoryOptions(categories);
     }
+    return categories;
+  }, [categoriesData, isLoading, isFetching, isSuccess, isError, error]);
+
+  const {
+    data: sourcesData = [],
+    error: sourcesError,
+    isLoading: sourcesLoading,
+    isSuccess: sourcesSuccess,
+    isError: sourcesIsError,
+  } = useGetSourcesQuery();
+
+  const sources = useMemo(() => {
+    let sources = {};
     if (sourcesData) {
-      let sources = {};
       sourcesData.forEach((category) => {
         sources[category.id] = category.name;
       });
-      setSourceOptions(sources);
     }
-  }, [categoriesData, sourcesData]);
+    return sources;
+  }, [
+    sourcesData,
+    sourcesLoading,
+    sourcesSuccess,
+    sourcesIsError,
+    sourcesError,
+  ]);
 
   const defaultSorted = [
     {
@@ -87,9 +100,9 @@ const Dashboard = () => {
       dataField: 'category',
       text: 'Category',
       sort: true,
-      formatter: (cell) => categoryOptions[cell],
+      formatter: (cell) => categories[cell],
       filter: selectFilter({
-        options: categoryOptions || {},
+        options: categories || {},
       }),
       footer: '',
     },
@@ -97,9 +110,9 @@ const Dashboard = () => {
       dataField: 'source',
       text: 'source',
       sort: true,
-      formatter: (cell) => sourceOptions[cell],
+      formatter: (cell) => sources[cell],
       filter: selectFilter({
-        options: sourceOptions || {},
+        options: sources || {},
       }),
       footer: '',
     },
