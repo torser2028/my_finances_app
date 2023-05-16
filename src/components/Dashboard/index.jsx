@@ -38,7 +38,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (categoriesData) {
       let categories = {};
-      categoriesData.forEach((category) => {
+      categoriesData.categories.forEach((category) => {
         categories[category.id] = category.name;
       });
       setCategoryOptions(categories);
