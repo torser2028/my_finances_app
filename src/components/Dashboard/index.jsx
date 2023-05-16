@@ -12,7 +12,7 @@ import FloatActionButton from './FloatActionButton';
 import BarChart from '../../assets/basic-bar-graph.png';
 
 import { useGetTransactionsQuery } from '../../redux/api/transactions';
-import { useGetCategoriesQuery } from '../../redux/api/categories';
+import { useGetCategoriesQuery } from '../../redux/api/categoriesApi';
 import { useGetSourcesQuery } from '../../redux/api/sources';
 
 const Dashboard = () => {
