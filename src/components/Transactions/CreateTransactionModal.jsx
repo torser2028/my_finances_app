@@ -1,12 +1,9 @@
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
-import React, { useEffect, MouseEvent } from 'react';
-import { useSelector } from 'react-redux';
-import { createTransaction } from '../../redux/slices/transactions';
-
 import { useDispatch } from 'react-redux';
 
+import { createTransaction } from '../../redux/slices/transactions';
 import TransactionsForm from './TransactionsForm';
 
 const CreateTransactionModal = ({
@@ -14,20 +11,20 @@ const CreateTransactionModal = ({
   handleCloseTransactionsModal,
   type,
 }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    value: '',
+    date: '',
+    category_id: '1',
+    source_id: '2',
+    transaction_type: type,
+    user_id: '1',
+  });
+
   const dispatch = useDispatch();
   const addTransaction = (e) => {
     e.preventDefault();
-    const transaction = {
-      transaction_type: 'expense',
-      name: 'Testing',
-      date: '15/05/2023',
-      value: '500000',
-      category_id: '1',
-      source_id: '2',
-      user_id: '1',
-    };
-    console.log(transaction);
-    dispatch(createTransaction({ transaction }));
+    dispatch(createTransaction({ transaction: formData }));
   };
   return (
     <div
@@ -39,7 +36,11 @@ const CreateTransactionModal = ({
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <TransactionsForm type={type} />
+          <TransactionsForm
+            type={type}
+            formData={formData}
+            setFormData={setFormData}
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseTransactionsModal}>
