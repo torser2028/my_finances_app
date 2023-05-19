@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
   dateFilter,
@@ -12,58 +13,47 @@ import FloatActionButton from './FloatActionButton';
 import BarChart from '../../assets/basic-bar-graph.png';
 
 import { useGetTransactionsQuery } from '../../redux/api/transactions';
-import { useGetCategoriesQuery } from '../../redux/api/categoriesApi';
 import { useGetSourcesQuery } from '../../redux/api/sources';
 
+import {
+  fetchCategories,
+  categoriesSelector,
+} from '../../redux/slices/categories';
+import { fetchSources, sourcesSelector } from '../../redux/slices/sources';
+
 const Dashboard = () => {
+  const { categories, loadingCategories } = useSelector(categoriesSelector);
+  const { sources, loadingSources } = useSelector(sourcesSelector);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchCategories());
+    dispatch(fetchSources());
+  }, [dispatch]);
+
+  const getCategories = () => {
+    let formattedCategories = {};
+    if (!loadingCategories && categories?.length > 0) {
+      categories.forEach((category) => {
+        formattedCategories[category.name] = category.name;
+      });
+    }
+    return formattedCategories;
+  };
+  const getSources = () => {
+    let formattedSources = {};
+    if (!loadingSources && sources?.length > 0) {
+      sources.forEach((source) => {
+        formattedSources[source.name] = source.name;
+      });
+    }
+    return formattedSources;
+  };
+
   const {
     data: transactionsData,
     error: transactionsError,
     isLoading: transactionsLoading,
   } = useGetTransactionsQuery();
-
-  const {
-    data: categoriesData = [],
-    isLoading,
-    isFetching,
-    isSuccess,
-    isError,
-    error,
-  } = useGetCategoriesQuery();
-
-  const categories = useMemo(() => {
-    let categories = {};
-    if (categoriesData && isSuccess) {
-      categoriesData.categories.forEach((category) => {
-        categories[category.name] = category.name;
-      });
-    }
-    return categories;
-  }, [categoriesData, isLoading, isFetching, isSuccess, isError, error]);
-
-  const {
-    data: sourcesData = [],
-    error: sourcesError,
-    isLoading: sourcesLoading,
-    isSuccess: sourcesSuccess,
-    isError: sourcesIsError,
-  } = useGetSourcesQuery();
-
-  const sources = useMemo(() => {
-    let sources = {};
-    if (sourcesData) {
-      sourcesData.forEach((source) => {
-        sources[source.name] = source.name;
-      });
-    }
-    return sources;
-  }, [
-    sourcesData,
-    sourcesLoading,
-    sourcesSuccess,
-    sourcesIsError,
-    sourcesError,
-  ]);
 
   const priceFormatter = (cell, row) => {
     const formattedValue = new Intl.NumberFormat('en-US', {
@@ -132,7 +122,7 @@ const Dashboard = () => {
       text: 'Category',
       sort: true,
       filter: selectFilter({
-        options: categories,
+        options: getCategories(),
       }),
       footer: '',
     },
@@ -140,7 +130,7 @@ const Dashboard = () => {
       dataField: 'source',
       text: 'Source',
       sort: true,
-      filter: selectFilter({ options: sources }),
+      filter: selectFilter({ options: getSources() }),
       footer: '',
     },
   ];

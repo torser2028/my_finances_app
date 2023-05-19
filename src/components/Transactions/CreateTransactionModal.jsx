@@ -15,8 +15,8 @@ const CreateTransactionModal = ({
     name: '',
     value: '',
     date: '',
-    category_id: '1',
-    source_id: '2',
+    category_id: '',
+    source_id: '',
     transaction_type: type,
     user_id: '1',
   });
@@ -26,6 +26,7 @@ const CreateTransactionModal = ({
     e.preventDefault();
     dispatch(createTransaction({ transaction: formData }));
   };
+
   return (
     <div
       className="modal show"

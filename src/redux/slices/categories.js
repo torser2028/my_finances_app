@@ -1,127 +1,73 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { categoriesApi } from '../api/categoriesApi';
+import { createSlice } from '@reduxjs/toolkit';
 
-// Thunk action to fetch all categories
-export const fetchCategories = createAsyncThunk(
-  'categories/fetchCategories',
-  async () => {
-    console.log('fetchCategories');
-    const response = await categoriesApi.getCategories();
-    console.log('fetchCategories response', response);
-    return response.data;
-  },
-);
+export const initialState = {
+  loadingCategories: false,
+  hasErrors: false,
+  categories: [],
+};
 
-// Thunk action to fetch a single category
-export const fetchCategory = createAsyncThunk(
-  'categories/fetchCategory',
-  async (categoryId) => {
-    const response = await categoriesApi.getCategory(categoryId);
-    return response.data;
-  },
-);
-
-// Thunk action to update a category
-export const updateCategory = createAsyncThunk(
-  'categories/updateCategory',
-  async ({ categoryId, category }) => {
-    const response = await categoriesApi.updateCategory(categoryId, category);
-    return response.data;
-  },
-);
-
-// Thunk action to delete a category
-export const deleteCategory = createAsyncThunk(
-  'categories/deleteCategory',
-  async (categoryId) => {
-    await categoriesApi.deleteCategory(categoryId);
-    return categoryId;
-  },
-);
-
-// Thunk action to create a new category
-export const createCategory = createAsyncThunk(
-  'categories/createCategory',
-  async (category) => {
-    const response = await categoriesApi.createCategory(category);
-    return response.data;
-  },
-);
-
+const API_URL = 'http://localhost:3001/api/v1';
+// A slice
 const categoriesSlice = createSlice({
   name: 'categories',
-  initialState: {
-    categories: [],
-    selectedCategory: null,
-    status: 'idle',
-    error: null,
-  },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchCategories.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchCategories.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.categories = action.payload;
-      })
-      .addCase(fetchCategories.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-      .addCase(fetchCategory.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchCategory.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.selectedCategory = action.payload;
-      })
-      .addCase(fetchCategory.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-      .addCase(updateCategory.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(updateCategory.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        const updatedCategory = action.payload;
-        state.categories = state.categories.map((category) =>
-          category.id === updatedCategory.id ? updatedCategory : category,
-        );
-      })
-      .addCase(updateCategory.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-      .addCase(deleteCategory.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(deleteCategory.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        const categoryId = action.payload;
-        state.categories = state.categories.filter(
-          (category) => category.id !== categoryId,
-        );
-      })
-      .addCase(deleteCategory.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-      .addCase(createCategory.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(createCategory.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        const newCategory = action.payload;
-        state.categories.push(newCategory);
-      })
-      .addCase(createCategory.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      });
+  initialState,
+  reducers: {
+    addCategory: (state, action) => {
+      state.categories.unshift(action.payload);
+    },
+    startLoading: (state) => {
+      state.loadingCategories = true;
+    },
+    getCategoriesSuccess: (state, action) => {
+      state.categories = action.payload.categories;
+      state.loadingCategories = false;
+      state.hasErrors = false;
+    },
+    getCategoriesFailure: (state) => {
+      state.loadingCategories = false;
+      //handling Errors
+      state.hasErrors = true;
+    },
   },
 });
 
-export default categoriesSlice.reducer;
+// Actions generated from the slice
+const {
+  addCategory,
+  startLoading,
+  getCategoriesFailure,
+  getCategoriesSuccess,
+} = categoriesSlice.actions;
+
+// export user selector to get the slice in any component
+export const categoriesSelector = (state) => state.categories;
+// export The reducer
+const categoryReducer = categoriesSlice.reducer;
+export default categoryReducer;
+// Actions
+export const fetchCategories = () => async (dispatch) => {
+  try {
+    dispatch(startLoading());
+    const response = await fetch(`${API_URL}/categories`);
+    const data = await response.json();
+    dispatch(getCategoriesSuccess(data));
+  } catch (error) {
+    dispatch(getCategoriesFailure());
+  }
+};
+
+export const createCategory = (category) => async (dispatch) => {
+  try {
+    const response = await fetch(`${API_URL}/categories`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(category),
+    });
+    const data = await response.json();
+    dispatch(getCategoriesSuccess(data));
+  } catch (error) {
+    dispatch(getCategoriesFailure());
+  }
+};

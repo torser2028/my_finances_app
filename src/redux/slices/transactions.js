@@ -48,7 +48,7 @@ export default transactionReducer;
 export const fetchTransactions = () => async (dispatch) => {
   try {
     dispatch(startLoading());
-    const response = await fetch(`${API_URL}/transaction`);
+    const response = await fetch(`${API_URL}/transactions`);
     const data = await response.json();
     dispatch(getTransactionsSuccess(data));
   } catch (error) {
@@ -57,7 +57,6 @@ export const fetchTransactions = () => async (dispatch) => {
 };
 
 export const createTransaction = (transaction) => async (dispatch) => {
-  console.log('createTransaction: ', transaction);
   try {
     const response = await fetch(`${API_URL}/transactions`, {
       method: 'POST',
@@ -66,9 +65,7 @@ export const createTransaction = (transaction) => async (dispatch) => {
       },
       body: JSON.stringify(transaction),
     });
-    console.log('createTransaction response: ', response);
     const data = await response.json();
-    console.log('createTransaction data: ', data);
     dispatch(getTransactionsSuccess(data));
   } catch (error) {
     dispatch(getTransactionsFailure());
