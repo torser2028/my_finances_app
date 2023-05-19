@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
   loadingSources: false,
-  hasErrors: false,
+  sourcesHasErrors: false,
   sources: [],
 };
 
@@ -21,12 +21,12 @@ const sourceSlice = createSlice({
     getSourcesSuccess: (state, action) => {
       state.sources = action.payload;
       state.loadingSources = false;
-      state.hasErrors = false;
+      state.sourcesHasErrors = false;
     },
     getSourcesFailure: (state) => {
       state.loadingSources = false;
       //handling Errors
-      state.hasErrors = true;
+      state.sourcesHasErrors = true;
     },
   },
 });

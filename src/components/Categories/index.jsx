@@ -1,10 +1,21 @@
+import React, { useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
+import { useDispatch, useSelector } from 'react-redux';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
-import { useGetCategoriesQuery } from '../../redux/api/categoriesApi';
+import {
+  fetchCategories,
+  categoriesSelector,
+} from '../../redux/slices/categories';
 
 const Categories = () => {
-  const { data, error, isLoading } = useGetCategoriesQuery();
+  const { categories, loadingCategories, categoriesHasErrors } =
+    useSelector(categoriesSelector);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
   const defaultSorted = [
     {
       dataField: 'name',
@@ -27,16 +38,16 @@ const Categories = () => {
 
   return (
     <div className="App">
-      {error ? (
+      {categoriesHasErrors ? (
         <>Oh no, there was an error</>
-      ) : isLoading ? (
+      ) : loadingCategories ? (
         <>Loading...</>
-      ) : data ? (
+      ) : categories ? (
         <>
           <h2>Categories</h2>
           <BootstrapTable
             keyField="id"
-            data={data.categories}
+            data={categories}
             columns={columns}
             defaultSorted={defaultSorted}
           />

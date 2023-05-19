@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
@@ -12,22 +12,26 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import FloatActionButton from './FloatActionButton';
 import BarChart from '../../assets/basic-bar-graph.png';
 
-import { useGetTransactionsQuery } from '../../redux/api/transactions';
-import { useGetSourcesQuery } from '../../redux/api/sources';
-
 import {
   fetchCategories,
   categoriesSelector,
 } from '../../redux/slices/categories';
 import { fetchSources, sourcesSelector } from '../../redux/slices/sources';
+import {
+  fetchTransactions,
+  transactionsSelector,
+} from '../../redux/slices/transactions';
 
 const Dashboard = () => {
   const { categories, loadingCategories } = useSelector(categoriesSelector);
   const { sources, loadingSources } = useSelector(sourcesSelector);
+  const { transactions, loadingTransactions, transactionsHasErrors } =
+    useSelector(transactionsSelector);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchSources());
+    dispatch(fetchTransactions());
   }, [dispatch]);
 
   const getCategories = () => {
@@ -39,6 +43,7 @@ const Dashboard = () => {
     }
     return formattedCategories;
   };
+
   const getSources = () => {
     let formattedSources = {};
     if (!loadingSources && sources?.length > 0) {
@@ -48,12 +53,6 @@ const Dashboard = () => {
     }
     return formattedSources;
   };
-
-  const {
-    data: transactionsData,
-    error: transactionsError,
-    isLoading: transactionsLoading,
-  } = useGetTransactionsQuery();
 
   const priceFormatter = (cell, row) => {
     const formattedValue = new Intl.NumberFormat('en-US', {
@@ -137,11 +136,11 @@ const Dashboard = () => {
 
   return (
     <div className="App">
-      {transactionsError ? (
+      {transactionsHasErrors ? (
         <>Oh no, there was an error</>
-      ) : transactionsLoading ? (
+      ) : loadingTransactions ? (
         <>Loading...</>
-      ) : transactionsData ? (
+      ) : transactions ? (
         <div>
           <div>
             {/* <img src={BarChart} alt="Bar Chart Placeholder Image" /> */}
@@ -150,7 +149,7 @@ const Dashboard = () => {
             <h2>Transactions</h2>
             <BootstrapTable
               keyField="id"
-              data={transactionsData}
+              data={transactions}
               columns={columns}
               filter={filterFactory()}
               defaultSorted={defaultSorted}

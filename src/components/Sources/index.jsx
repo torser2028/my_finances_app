@@ -1,10 +1,18 @@
+import React, { useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
+import { useDispatch, useSelector } from 'react-redux';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
-import { useGetSourcesQuery } from '../../redux/api/sources';
+import { fetchSources, sourcesSelector } from '../../redux/slices/sources';
 
 const Sources = () => {
-  const { data, error, isLoading } = useGetSourcesQuery();
+  const { sources, loadingSources, sourcesHasErrors } =
+    useSelector(sourcesSelector);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchSources());
+  }, [dispatch]);
+
   const defaultSorted = [
     {
       dataField: 'name',
@@ -22,16 +30,16 @@ const Sources = () => {
 
   return (
     <div className="App">
-      {error ? (
+      {sourcesHasErrors ? (
         <>Oh no, there was an error</>
-      ) : isLoading ? (
+      ) : loadingSources ? (
         <>Loading...</>
-      ) : data ? (
+      ) : sources ? (
         <>
           <h2>Sources</h2>
           <BootstrapTable
             keyField="id"
-            data={data}
+            data={sources}
             columns={columns}
             defaultSorted={defaultSorted}
           />

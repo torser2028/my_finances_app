@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
   loadingCategories: false,
-  hasErrors: false,
+  categoriesHasErrors: false,
   categories: [],
 };
 
@@ -21,12 +21,12 @@ const categoriesSlice = createSlice({
     getCategoriesSuccess: (state, action) => {
       state.categories = action.payload.categories;
       state.loadingCategories = false;
-      state.hasErrors = false;
+      state.categoriesHasErrors = false;
     },
     getCategoriesFailure: (state) => {
       state.loadingCategories = false;
       //handling Errors
-      state.hasErrors = true;
+      state.categoriesHasErrors = true;
     },
   },
 });

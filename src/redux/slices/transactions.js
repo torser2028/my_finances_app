@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
-  loading: false,
-  hasErrors: false,
+  loadingTransactions: false,
+  transactionsHasErrors: false,
   transactions: [],
 };
 
@@ -16,17 +16,17 @@ const transactionsSlice = createSlice({
       state.transactions.unshift(action.payload);
     },
     startLoading: (state) => {
-      state.loading = true;
+      state.loadingTransactions = true;
     },
     getTransactionsSuccess: (state, action) => {
       state.transactions = action.payload;
-      state.loading = false;
-      state.hasErrors = false;
+      state.loadingTransactions = false;
+      state.transactionsHasErrors = false;
     },
     getTransactionsFailure: (state) => {
-      state.loading = false;
+      state.loadingTransactions = false;
       //handling Errors
-      state.hasErrors = true;
+      state.transactionsHasErrors = true;
     },
   },
 });
