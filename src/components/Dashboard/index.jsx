@@ -84,7 +84,7 @@ const Dashboard = () => {
   const defaultSorted = [
     {
       dataField: 'date',
-      order: 'asc',
+      order: 'desc',
     },
   ];
 

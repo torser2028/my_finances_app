@@ -17,13 +17,13 @@ const CreateTransactionModal = ({
     date: '',
     category_id: '',
     source_id: '',
-    transaction_type: type,
     user_id: '1',
   });
 
   const dispatch = useDispatch();
   const addTransaction = (e) => {
     e.preventDefault();
+    formData.transaction_type = type;
     dispatch(createTransaction({ transaction: formData }));
   };
 
