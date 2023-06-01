@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
   dateFilter,
@@ -11,55 +12,81 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import FloatActionButton from './FloatActionButton';
 import BarChart from '../../assets/basic-bar-graph.png';
 
-import { useGetTransactionsQuery } from '../../redux/api/transactions';
-import { useGetCategoriesQuery } from '../../redux/api/categories';
-import { useGetSourcesQuery } from '../../redux/api/sources';
+import {
+  fetchCategories,
+  categoriesSelector,
+} from '../../redux/slices/categories';
+import { fetchSources, sourcesSelector } from '../../redux/slices/sources';
+import {
+  fetchTransactions,
+  transactionsSelector,
+} from '../../redux/slices/transactions';
 
 const Dashboard = () => {
-  const {
-    data: transactionsData,
-    error: transactionsError,
-    isLoading: transactionsLoading,
-  } = useGetTransactionsQuery();
-  const {
-    data: categoriesData,
-    error: categoriesError,
-    isLoading: categoriesLoading,
-  } = useGetCategoriesQuery();
-  const {
-    data: sourcesData,
-    error: sourcesError,
-    isLoading: sourcesLoading,
-  } = useGetSourcesQuery();
-
-  const [categoryOptions, setCategoryOptions] = useState({});
-  const [sourceOptions, setSourceOptions] = useState({});
-
+  const { categories, loadingCategories } = useSelector(categoriesSelector);
+  const { sources, loadingSources } = useSelector(sourcesSelector);
+  const { transactions, loadingTransactions, transactionsHasErrors } =
+    useSelector(transactionsSelector);
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (categoriesData) {
-      let categories = {};
-      categoriesData.forEach((category) => {
-        categories[category.id] = category.name;
+    dispatch(fetchCategories());
+    dispatch(fetchSources());
+    dispatch(fetchTransactions());
+  }, [dispatch]);
+
+  const getCategories = () => {
+    let formattedCategories = {};
+    if (!loadingCategories && categories?.length > 0) {
+      categories.forEach((category) => {
+        formattedCategories[category.name] = category.name;
       });
-      setCategoryOptions(categories);
     }
-    if (sourcesData) {
-      let sources = {};
-      sourcesData.forEach((category) => {
-        sources[category.id] = category.name;
+    return formattedCategories;
+  };
+
+  const getSources = () => {
+    let formattedSources = {};
+    if (!loadingSources && sources?.length > 0) {
+      sources.forEach((source) => {
+        formattedSources[source.name] = source.name;
       });
-      setSourceOptions(sources);
     }
-  }, [categoriesData, sourcesData]);
+    return formattedSources;
+  };
+
+  const priceFormatter = (cell, row) => {
+    const formattedValue = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(cell);
+
+    if (row.transaction_type === 'income') {
+      return (
+        <span>
+          <strong style={{ color: '#276221' }}>{formattedValue}</strong>
+        </span>
+      );
+    } else {
+      return (
+        <span>
+          <strong style={{ color: '#ff0000' }}>{formattedValue}</strong>
+        </span>
+      );
+    }
+  };
+
+  const dateFormatter = (cell, row) => {
+    const formattedDate = new Date(cell).toLocaleDateString('en-US');
+    return <span>{formattedDate}</span>;
+  };
 
   const defaultSorted = [
     {
       dataField: 'date',
-      order: 'asc',
+      order: 'desc',
     },
   ];
 
-  // TODO: The drop down filters are not getting the that on load
   const columns = [
     {
       dataField: 'name',
@@ -68,10 +95,12 @@ const Dashboard = () => {
       filter: textFilter(),
       footer: '',
     },
+    { dataField: 'transaction_type', text: 'Type', sort: true, footer: '' },
     {
       dataField: 'date',
       text: 'Date',
       sort: true,
+      formatter: dateFormatter,
       filter: dateFilter(),
       footer: '',
     },
@@ -80,47 +109,47 @@ const Dashboard = () => {
       text: 'Value',
       sort: true,
       filter: numberFilter(),
+      formatter: priceFormatter,
       footer: (columnData) =>
-        columnData.reduce((acc, item) => parseInt(acc) + parseInt(item), 0),
+        `$${columnData.reduce(
+          (acc, item) => parseInt(acc) + parseInt(item),
+          0,
+        )}`,
     },
     {
       dataField: 'category',
       text: 'Category',
       sort: true,
-      formatter: (cell) => categoryOptions[cell],
       filter: selectFilter({
-        options: categoryOptions || {},
+        options: getCategories(),
       }),
       footer: '',
     },
     {
       dataField: 'source',
-      text: 'source',
+      text: 'Source',
       sort: true,
-      formatter: (cell) => sourceOptions[cell],
-      filter: selectFilter({
-        options: sourceOptions || {},
-      }),
+      filter: selectFilter({ options: getSources() }),
       footer: '',
     },
   ];
 
   return (
     <div className="App">
-      {transactionsError ? (
+      {transactionsHasErrors ? (
         <>Oh no, there was an error</>
-      ) : transactionsLoading ? (
+      ) : loadingTransactions ? (
         <>Loading...</>
-      ) : transactionsData ? (
+      ) : transactions ? (
         <div>
           <div>
             {/* <img src={BarChart} alt="Bar Chart Placeholder Image" /> */}
           </div>
           <div>
-            <h2>Movements</h2>
+            <h2>Transactions</h2>
             <BootstrapTable
               keyField="id"
-              data={transactionsData}
+              data={transactions}
               columns={columns}
               filter={filterFactory()}
               defaultSorted={defaultSorted}
